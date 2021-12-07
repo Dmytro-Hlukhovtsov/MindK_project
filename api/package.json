@@ -1,14 +1,41 @@
 {
-  "name": "api",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "express": "^4.17.1"
-  }
+    "name": "api",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "prepare": "cd .. && npx husky install api/.husky",
+        "start": "node src/app.js",
+        "start-dev": "nodemon src/app.js",
+        "start-debug": "nodemon --inspect src/app.js",
+        "lint-dev": "eslint . --max-warnings=0"
+    },
+    "husky": {
+        "hooks": {
+            "pre-commit": "cd api && npx lint-staged"
+        }
+    },
+    "lint-staged": {
+        "*.js": [
+            "npm run lint-dev",
+            "git add"
+        ]
+    },
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "express": "^4.17.1"
+    },
+    "devDependencies": {
+        "dotenv": "^10.0.0",
+        "eslint": "^8.4.1",
+        "eslint-config-airbnb-base": "^15.0.0",
+        "eslint-config-prettier": "^8.3.0",
+        "eslint-plugin-import": "^2.25.3",
+        "eslint-plugin-prettier": "^4.0.0",
+        "husky": "^7.0.4",
+        "lint-staged": "^12.1.2",
+        "prettier": "^2.5.1",
+        "prettier-eslint": "^8.2.2"
+    }
 }
