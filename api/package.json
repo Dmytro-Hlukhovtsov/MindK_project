@@ -10,11 +10,6 @@
         "start-debug": "nodemon --inspect src/app.js",
         "lint-dev": "eslint . --max-warnings=0"
     },
-    "husky": {
-        "hooks": {
-            "pre-commit": "cd api && npx lint-staged"
-        }
-    },
     "lint-staged": {
         "*.js": [
             "npm run lint-dev",
