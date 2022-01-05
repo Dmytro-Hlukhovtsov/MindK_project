@@ -1,22 +1,31 @@
-import {ShowPost} from "../../components/post/post";
+import { ShowPost } from "../../components/post/post";
 
-export function PostContainer({logo, username, tag, text, timestamp, retweet, likes}){
+function PostContainer({
+  logo,
+  username,
+  tag,
+  text,
+  timestamp,
+  retweet,
+  likes,
+}) {
+  const headerVars = {
+    logo,
+    username,
+    tag,
+  };
 
-    const headerVars = {
-        logo: logo,
-        username: username,
-        tag:tag
-    }
+  const bodyVars = {
+    text,
+    timestamp,
+  };
 
-    const bodyVars = {
-        text: text,
-        timestamp: timestamp
-    }
+  const footerVars = {
+    retweet,
+    likes,
+  };
 
-    const footerVars = {
-        retweet: retweet,
-        likes: likes
-    }
-
-    return <ShowPost header={headerVars} body={bodyVars} footer={footerVars} />
+  return <ShowPost header={headerVars} body={bodyVars} footer={footerVars} />;
 }
+
+export default PostContainer;
