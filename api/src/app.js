@@ -1,28 +1,21 @@
 const express = require("express");
+const bodyParser = require("body-parser");
+
+const config = require("./services/config");
+
+const usersRoutes = require("./routes/profile");
+const postsRoutes = require("./routes/posts");
+
+const port = config.appPort;
 
 const app = express();
 
-const { Pool } = require("pg");
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.json());
 
-const pool = new Pool({
-  user: "postgres",
-  host: "localhost",
-  database: "postgres",
-  password: "123456",
-  port: 5432,
+app.use("/users", usersRoutes);
+app.use("/posts", postsRoutes);
+
+app.listen(port, () => {
+  console.log(`Example app listening at http://localhost:${port}`);
 });
-
-app.get("/", (req, res) => {
-  pool.query("SELECT * FROM uset;", (error, results) => {
-    if (error) {
-      throw error;
-    }
-
-    res.status(200).json(results.rows);
-  });
-});
-
-console.log(process.env.APP_PORT);
-app.listen(process.env.APP_PORT);
-
-// docker-compose --env-file .env up -d
