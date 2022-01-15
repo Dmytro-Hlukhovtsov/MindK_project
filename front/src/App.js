@@ -12,6 +12,7 @@ import PostContainer from "./containers/post/post";
 import AddPost from "./components/AddPost";
 import avatar from "./img/avatar.png";
 import Profile from "./components/Profile";
+import ErrorBoundary from "./components/ErrorBoundary";
 
 const post = {
   logo: avatar,
@@ -62,19 +63,21 @@ function App() {
   return (
     <BrowserRouter>
       <div className="App">
-        <div className="header">
-          <ul>
-            <li>
-              <Link to="/posts">Posts</Link>
-            </li>
-            <li>
-              <Link to="/posts/add-post">Add Post</Link>
-            </li>
-            <li>
-              <Link to="/profile">Profile</Link>
-            </li>
-          </ul>
-        </div>
+        <ErrorBoundary>
+          <div className="header">
+            <ul>
+              <li>
+                <Link to="/posts">Posts</Link>
+              </li>
+              <li>
+                <Link to="/posts/add-post">Add Post</Link>
+              </li>
+              <li>
+                <Link to="/profile">Profile</Link>
+              </li>
+            </ul>
+          </div>
+        </ErrorBoundary>
         <div className="body">
           <Routes>
             <Route path="/" element="Это главная" />
@@ -93,7 +96,89 @@ function App() {
               }
             />
             <Route path="/posts/add-post" element={<AddPost />} />
-            <Route path="/profile" element={<Profile />} />
+            <Route
+              path="/profile"
+              element={
+                <Profile
+                  user={{
+                    name: "test",
+                    age: "23",
+                    avatar: {
+                      file: {
+                        id: 1,
+                        name: "123.jpg",
+                        path: "/files/1.jpg",
+                      },
+                    },
+                    files: [
+                      {
+                        id: 1,
+                        name: "123.jpg",
+                        path: "/files/1.jpg",
+                      },
+                      {
+                        id: 1,
+                        name: "123.jpg",
+                        path: "/files/1.jpg",
+                      },
+                    ],
+                    addrr: {
+                      main: {
+                        line1: "test",
+                        line2: "test",
+                        city: "test",
+                        zip: 1234,
+                      },
+                      alt: {
+                        line1: "test",
+                        line2: "test",
+                        city: "test",
+                        zip: 1234,
+                      },
+                    },
+                    friends: [
+                      {
+                        name: "test",
+                        age: "23",
+                        avatar: {
+                          file: {
+                            id: 1,
+                            name: "123.jpg",
+                            path: "/files/1.jpg",
+                          },
+                        },
+                        files: [
+                          {
+                            id: 1,
+                            name: "123.jpg",
+                            path: "/files/1.jpg",
+                          },
+                          {
+                            id: 1,
+                            name: "123.jpg",
+                            path: "/files/1.jpg",
+                          },
+                        ],
+                        addrr: {
+                          main: {
+                            line1: "test",
+                            line2: "test",
+                            city: "test",
+                            zip: 1234,
+                          },
+                          alt: {
+                            line1: "test",
+                            line2: "test",
+                            city: "test",
+                            zip: 1234,
+                          },
+                        },
+                      },
+                    ],
+                  }}
+                />
+              }
+            />
             <Route path="/posts/:id" element={<RegularCheck />} />
             <Route path="/date/:data" element={<DataCheck />} />
             <Route path="*" element={<div>404</div>} />
