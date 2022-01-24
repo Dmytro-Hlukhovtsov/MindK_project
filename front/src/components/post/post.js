@@ -4,7 +4,7 @@ import { PostFooter } from "./postComponents/postFooter";
 
 export function ShowPost({ header, body, footer }) {
   return (
-    <div className="post">
+    <div className="post-card">
       <PostHeader
         logo={header.logo}
         username={header.username}

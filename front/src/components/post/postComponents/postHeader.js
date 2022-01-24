@@ -1,5 +1,5 @@
 export function PostHeader({ logo, username = "default", tag = "default" }) {
-  console.log({ username });
+  console.log(logo);
   return (
     <div className="post-header">
       <div className="user-block">

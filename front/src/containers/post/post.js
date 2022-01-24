@@ -10,6 +10,7 @@ const PostContainer = ({
   timestamp,
   retweet,
   likes,
+  postID,
 }) => {
   const headerVars = {
     logo,
@@ -27,7 +28,14 @@ const PostContainer = ({
     likes,
   };
 
-  return <ShowPost header={headerVars} body={bodyVars} footer={footerVars} />;
+  return (
+    <ShowPost
+      header={headerVars}
+      body={bodyVars}
+      footer={footerVars}
+      postID={postID}
+    />
+  );
 };
 
 PostContainer.propTypes = postPropTypes;
