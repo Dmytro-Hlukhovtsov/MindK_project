@@ -1,6 +1,8 @@
 import { ShowPost } from "../../components/post/post";
 
-function PostContainer({
+const postPropTypes = require("../../PropTypes/PostPropTypes");
+
+const PostContainer = ({
   logo,
   username,
   tag,
@@ -8,7 +10,7 @@ function PostContainer({
   timestamp,
   retweet,
   likes,
-}) {
+}) => {
   const headerVars = {
     logo,
     username,
@@ -26,6 +28,12 @@ function PostContainer({
   };
 
   return <ShowPost header={headerVars} body={bodyVars} footer={footerVars} />;
-}
+};
+
+PostContainer.propTypes = postPropTypes;
+
+PostContainer.defaultProps = {
+  tag: null,
+};
 
 export default PostContainer;
