@@ -8,11 +8,17 @@ import {
 } from "react-router-dom";
 
 import "./App.css";
+import { QueryClient, QueryClientProvider } from "react-query";
 import PostContainer from "./containers/post/post";
-import AddPost from "./components/AddPost";
+import AddPost from "./components/post/AddPost";
 import avatar from "./img/avatar.png";
-import Profile from "./components/Profile";
 import ErrorBoundary from "./components/ErrorBoundary";
+import PostsContainer from "./containers/post/allPosts";
+import SinglePostContainer from "./containers/post/singlePost";
+import ProfilesContainer from "./containers/profile/allProfiles";
+import ProfileContainer from "./containers/profile/profile";
+
+const queryClient = new QueryClient();
 
 const post = {
   logo: avatar,
@@ -24,7 +30,7 @@ const post = {
   likes: 260,
 };
 
-function RegularCheck() {
+/* function RegularCheck() {
   const { id } = useParams();
   const re1 = /^\d+$/;
   const re2 = /^[A-Z]+$/;
@@ -42,7 +48,7 @@ function RegularCheck() {
     return <div>ID is {id} - it is file</div>;
   }
   return <div>Go out here!</div>;
-}
+} */
 
 function DataCheck() {
   try {
@@ -61,131 +67,60 @@ function DataCheck() {
 
 function App() {
   return (
-    <BrowserRouter>
-      <div className="App">
-        <ErrorBoundary>
-          <div className="header">
-            <ul>
-              <li>
-                <Link to="/posts">Posts</Link>
-              </li>
-              <li>
-                <Link to="/posts/add-post">Add Post</Link>
-              </li>
-              <li>
-                <Link to="/profile">Profile</Link>
-              </li>
-            </ul>
+    <QueryClientProvider client={queryClient}>
+      <BrowserRouter>
+        <div className="App">
+          <ErrorBoundary>
+            <div className="header">
+              <ul>
+                <li>
+                  <Link to="/posts">Posts</Link>
+                </li>
+                <li>
+                  <Link to="/posts/add-post">Add Post</Link>
+                </li>
+                <li>
+                  <Link to="/profiles">Profile</Link>
+                </li>
+              </ul>
+            </div>
+          </ErrorBoundary>
+          <div className="body">
+            <ErrorBoundary>
+              <Routes>
+                <Route path="/" element="Это главная" />
+                <Route path="/posts" element={<PostsContainer />} />
+                <Route
+                  path="/post"
+                  element={
+                    <PostContainer
+                      logo={post.logo}
+                      username={post.username}
+                      tag={post.tag}
+                      text={post.text}
+                      timestamp={post.timestamp}
+                      retweet={post.retweet}
+                      likes={post.likes}
+                    />
+                  }
+                />
+                <Route path="/posts/add-post" element={<AddPost />} />
+                <Route path="/profiles" element={<ProfilesContainer />} />
+
+                <Route
+                  path="/profiles/:userid"
+                  element={<ProfileContainer />}
+                />
+
+                <Route path="/posts/:id" element={<SinglePostContainer />} />
+                <Route path="/date/:data" element={<DataCheck />} />
+                <Route path="*" element={<div>404</div>} />
+              </Routes>
+            </ErrorBoundary>
           </div>
-        </ErrorBoundary>
-        <div className="body">
-          <Routes>
-            <Route path="/" element="Это главная" />
-            <Route
-              path="/posts"
-              element={
-                <PostContainer
-                  logo={post.logo}
-                  username={post.username}
-                  tag={post.tag}
-                  text={post.text}
-                  timestamp={post.timestamp}
-                  retweet={post.retweet}
-                  likes={post.likes}
-                />
-              }
-            />
-            <Route path="/posts/add-post" element={<AddPost />} />
-            <Route
-              path="/profile"
-              element={
-                <Profile
-                  user={{
-                    name: "test",
-                    age: "23",
-                    avatar: {
-                      file: {
-                        id: 1,
-                        name: "123.jpg",
-                        path: "/files/1.jpg",
-                      },
-                    },
-                    files: [
-                      {
-                        id: 1,
-                        name: "123.jpg",
-                        path: "/files/1.jpg",
-                      },
-                      {
-                        id: 1,
-                        name: "123.jpg",
-                        path: "/files/1.jpg",
-                      },
-                    ],
-                    addrr: {
-                      main: {
-                        line1: "test",
-                        line2: "test",
-                        city: "test",
-                        zip: 1234,
-                      },
-                      alt: {
-                        line1: "test",
-                        line2: "test",
-                        city: "test",
-                        zip: 1234,
-                      },
-                    },
-                    friends: [
-                      {
-                        name: "test",
-                        age: "23",
-                        avatar: {
-                          file: {
-                            id: 1,
-                            name: "123.jpg",
-                            path: "/files/1.jpg",
-                          },
-                        },
-                        files: [
-                          {
-                            id: 1,
-                            name: "123.jpg",
-                            path: "/files/1.jpg",
-                          },
-                          {
-                            id: 1,
-                            name: "123.jpg",
-                            path: "/files/1.jpg",
-                          },
-                        ],
-                        addrr: {
-                          main: {
-                            line1: "test",
-                            line2: "test",
-                            city: "test",
-                            zip: 1234,
-                          },
-                          alt: {
-                            line1: "test",
-                            line2: "test",
-                            city: "test",
-                            zip: 1234,
-                          },
-                        },
-                      },
-                    ],
-                  }}
-                />
-              }
-            />
-            <Route path="/posts/:id" element={<RegularCheck />} />
-            <Route path="/date/:data" element={<DataCheck />} />
-            <Route path="*" element={<div>404</div>} />
-          </Routes>
         </div>
-      </div>
-    </BrowserRouter>
+      </BrowserRouter>
+    </QueryClientProvider>
   );
 }
 
