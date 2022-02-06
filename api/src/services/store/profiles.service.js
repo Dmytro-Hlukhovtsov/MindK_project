@@ -16,25 +16,30 @@ module.exports = {
         "set3.type as universitysett"
       )
       .from("Users")
-      .join("CurrentFieldVisible as cfv", "cfv.user_id", "=", "Users.user_id")
+      .leftJoin(
+        "CurrentFieldVisible as cfv",
+        "Users.user_id",
+        "=",
+        "cfv.user_id"
+      )
       .as("settings")
       .leftJoin(
         "Visibility as set1",
-        "set1.visibility_id",
+        "cfv.email_visible",
         "=",
-        "cfv.email_visible"
+        "set1.visibility_id"
       )
       .leftJoin(
         "Visibility as set2",
-        "set2.visibility_id",
+        "cfv.phone_visible",
         "=",
-        "cfv.phone_visible"
+        "set2.visibility_id"
       )
       .leftJoin(
         "Visibility as set3",
-        "set3.visibility_id",
+        "cfv.university_visible",
         "=",
-        "cfv.university_visible"
+        "set3.visibility_id"
       )
 
       .where("Users.user_id", userid),

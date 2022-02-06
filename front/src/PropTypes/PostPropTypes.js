@@ -1,11 +1,11 @@
 const PropTypes = require("prop-types");
 
 module.exports = {
-  logo: PropTypes.string,
+  avatar: PropTypes.string,
   username: PropTypes.string.isRequired,
   tag: PropTypes.string,
   text: PropTypes.string.isRequired,
-  timestamp: PropTypes.string.isRequired,
-  retweet: PropTypes.number.isRequired,
-  likes: PropTypes.number.isRequired,
+  created_time: PropTypes.string.isRequired,
+  total_comments: PropTypes.number.isRequired,
+  total_likes: PropTypes.number.isRequired,
 };

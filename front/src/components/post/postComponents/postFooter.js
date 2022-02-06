@@ -1,20 +1,23 @@
-export function PostFooter({ retweet = "", likes = "" }) {
-  return (
-    <div className="footer">
-      <svg
-        width="30"
-        height="30"
-        viewBox="0 0 50 50"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <path
-          d="M18.5038 37.1875L4.22879 26.9375C3.89256 26.7388 3.61392 26.4559 3.42036 26.1167C3.2268 25.7775 3.125 25.3937 3.125 25.0031C3.125 24.6126 3.2268 24.2287 3.42036 23.8895C3.61392 23.5503 3.89256 23.2674 4.22879 23.0687L18.5038 12.8125C18.8441 12.6123 19.2313 12.5058 19.626 12.5036C20.0208 12.5015 20.4091 12.6038 20.7516 12.8003C21.094 12.9967 21.3784 13.2803 21.5758 13.6222C21.7732 13.964 21.8767 14.3521 21.8757 14.7469V18.75C26.5632 18.75 40.6257 18.75 43.7507 43.75C35.9382 29.6875 21.8757 31.25 21.8757 31.25V35.2531C21.8757 37.0031 19.9819 38.0594 18.5038 37.1906V37.1875Z"
-          fill="#7a7a7a"
-        />
-      </svg>
+import { CardActions, IconButton } from "@mui/material";
 
-      <div>
+export function PostFooter({ totalComments = "", likes = "" }) {
+  return (
+    <CardActions disableSpacing>
+      <IconButton aria-label="add to favorites">
+        <svg
+          width="30"
+          height="30"
+          viewBox="0 0 50 50"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M18.5038 37.1875L4.22879 26.9375C3.89256 26.7388 3.61392 26.4559 3.42036 26.1167C3.2268 25.7775 3.125 25.3937 3.125 25.0031C3.125 24.6126 3.2268 24.2287 3.42036 23.8895C3.61392 23.5503 3.89256 23.2674 4.22879 23.0687L18.5038 12.8125C18.8441 12.6123 19.2313 12.5058 19.626 12.5036C20.0208 12.5015 20.4091 12.6038 20.7516 12.8003C21.094 12.9967 21.3784 13.2803 21.5758 13.6222C21.7732 13.964 21.8767 14.3521 21.8757 14.7469V18.75C26.5632 18.75 40.6257 18.75 43.7507 43.75C35.9382 29.6875 21.8757 31.25 21.8757 31.25V35.2531C21.8757 37.0031 19.9819 38.0594 18.5038 37.1906V37.1875Z"
+            fill="#7a7a7a"
+          />
+        </svg>
+      </IconButton>
+      <IconButton aria-label="share">
         <svg
           width="30"
           height="30"
@@ -27,9 +30,9 @@ export function PostFooter({ retweet = "", likes = "" }) {
             fill="#7a7a7a"
           />
         </svg>
-        <p>{retweet}</p>
-      </div>
-      <div>
+        <p>{totalComments}</p>
+      </IconButton>
+      <IconButton>
         <svg
           width="30"
           height="30"
@@ -43,7 +46,7 @@ export function PostFooter({ retweet = "", likes = "" }) {
           />
         </svg>
         <p>{likes}</p>
-      </div>
-    </div>
+      </IconButton>
+    </CardActions>
   );
 }
