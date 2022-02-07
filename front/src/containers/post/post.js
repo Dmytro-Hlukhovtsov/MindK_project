@@ -1,47 +1,18 @@
+import PropTypes from "prop-types";
 import { ShowPost } from "../../components/post/post";
 
 const postPropTypes = require("../../PropTypes/PostPropTypes");
 
-const PostContainer = ({
-  logo,
-  username,
-  tag,
-  text,
-  timestamp,
-  retweet,
-  likes,
-  postID,
-}) => {
-  const headerVars = {
-    logo,
-    username,
-    tag,
-  };
+const PostContainer = ({ post }) => <ShowPost post={post} />;
 
-  const bodyVars = {
-    text,
-    timestamp,
-  };
-
-  const footerVars = {
-    retweet,
-    likes,
-  };
-
-  return (
-    <ShowPost
-      header={headerVars}
-      body={bodyVars}
-      footer={footerVars}
-      postID={postID}
-    />
-  );
+PostContainer.propTypes = {
+  post: PropTypes.shape(postPropTypes),
 };
 
-PostContainer.propTypes = postPropTypes;
-
 PostContainer.defaultProps = {
-  tag: null,
+  post: {
+    tag: null,
+  },
 };
 
 export default PostContainer;

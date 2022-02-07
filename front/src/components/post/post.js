@@ -1,17 +1,17 @@
+import { Card } from "@mui/material";
 import { PostHeader } from "./postComponents/postHeader";
 import { PostBody } from "./postComponents/postBody";
 import { PostFooter } from "./postComponents/postFooter";
 
-export function ShowPost({ header, body, footer }) {
+export function ShowPost({ post }) {
   return (
-    <div className="post-card">
-      <PostHeader
-        logo={header.logo}
-        username={header.username}
-        tag={header.tag}
+    <Card className="post-card" sx={{ maxWidth: 500, minWidth: 400 }}>
+      <PostHeader post={post} />
+      <PostBody text={post.text} timestamp={post.created_time} />
+      <PostFooter
+        totalComments={post.total_comments}
+        likes={post.total_likes}
       />
-      <PostBody text={body.text} timestamp={body.timestamp} />
-      <PostFooter retweet={footer.retweet} likes={footer.likes} />
-    </div>
+    </Card>
   );
 }
