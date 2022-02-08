@@ -3,9 +3,12 @@ const postServices = require("../services/store/posts.service");
 const commentServices = require("../services/store/comments.service");
 const likesServices = require("../services/store/likes.service");
 
+const asyncHandler = require("../services/asyncHandler");
+
 // Get All Posts
-router.get("/", async (req, res) => {
-  try {
+router.get(
+  "/",
+  asyncHandler(async (req, res) => {
     const limit = req.query.limit || 10;
     const page = req.query.page || 1;
     const offset = (page - 1) * limit;
@@ -15,29 +18,27 @@ router.get("/", async (req, res) => {
     } else {
       res.send("Posts not found");
     }
-  } catch (e) {
-    res.send("Some error with fetching posts");
-  }
-});
+  })
+);
 
 // Get One Post
-router.get("/:postid", async (req, res) => {
-  const postId = req.params.postid;
-  try {
+router.get(
+  "/:postid",
+  asyncHandler(async (req, res) => {
+    const postId = req.params.postid;
     const post = await postServices.getOnePost(postId);
     if (post && Object.keys(post).length) {
       res.send(post);
     } else {
       res.send("Post not found");
     }
-  } catch (e) {
-    res.send("Some error with fetching post");
-  }
-});
+  })
+);
 
 // Add Post
-router.post("/", async (req, res) => {
-  try {
+router.post(
+  "/",
+  asyncHandler(async (req, res) => {
     const postData = req.body;
     const visible = postData.visibility;
     const postMedia = postData.link;
@@ -45,14 +46,13 @@ router.post("/", async (req, res) => {
     delete postData.link;
     await postServices.addPostTransaction(postData, postMedia, visible);
     res.send("Post Added");
-  } catch (error) {
-    res.send(error);
-  }
-});
+  })
+);
 
 // Update Post
-router.put("/:postid", async (req, res) => {
-  try {
+router.put(
+  "/:postid",
+  asyncHandler(async (req, res) => {
     const postData = req.body;
     const visible = postData.visibility;
     const postMedia = postData.link;
@@ -68,16 +68,15 @@ router.put("/:postid", async (req, res) => {
     );
 
     res.send("Post Updated");
-  } catch (error) {
-    res.send(error);
-  }
-});
+  })
+);
 
 // Delete Post
-router.delete("/:postid", async (req, res) => {
-  const postId = req.params.postid;
+router.delete(
+  "/:postid",
+  asyncHandler(async (req, res) => {
+    const postId = req.params.postid;
 
-  try {
     const deletePost = await postServices.deletePost(postId);
 
     if (deletePost && Object.keys(deletePost).length) {
@@ -85,14 +84,13 @@ router.delete("/:postid", async (req, res) => {
     } else {
       res.send("Post Deleting");
     }
-  } catch (error) {
-    res.send("Post deleting error");
-  }
-});
+  })
+);
 
 // Get Comments
-router.get("/:postid/comments", async (req, res) => {
-  try {
+router.get(
+  "/:postid/comments",
+  asyncHandler(async (req, res) => {
     const postId = req.params.postid;
     const comments = await commentServices.getAllComments(postId);
     if (comments && Object.keys(comments).length) {
@@ -100,14 +98,13 @@ router.get("/:postid/comments", async (req, res) => {
     } else {
       res.send("Comments not found");
     }
-  } catch (e) {
-    res.send("Some error with fetching comments");
-  }
-});
+  })
+);
 
 // Add Comment
-router.post("/:postid/comments", async (req, res) => {
-  try {
+router.post(
+  "/:postid/comments",
+  asyncHandler(async (req, res) => {
     const commData = req.body;
     const comment = await commentServices.addComment(commData);
     if (comment && Object.keys(comment).length) {
@@ -115,14 +112,13 @@ router.post("/:postid/comments", async (req, res) => {
     } else {
       res.send("Comment not found");
     }
-  } catch (e) {
-    res.send(e);
-  }
-});
+  })
+);
 
 // Update Comment
-router.put("/:postid/comments/:commentid", async (req, res) => {
-  try {
+router.put(
+  "/:postid/comments/:commentid",
+  asyncHandler(async (req, res) => {
     const commData = req.body;
     const commId = req.params.commentid;
     const comment = await commentServices.updateComment(commData, commId);
@@ -131,14 +127,13 @@ router.put("/:postid/comments/:commentid", async (req, res) => {
     } else {
       res.send("Comment not found");
     }
-  } catch (e) {
-    res.send(e);
-  }
-});
+  })
+);
 
 // Delete Comment
-router.delete("/:postid/comments/:commentid", async (req, res) => {
-  try {
+router.delete(
+  "/:postid/comments/:commentid",
+  asyncHandler(async (req, res) => {
     const commId = req.params.commentid;
     const comment = await commentServices.deleteComment(commId);
     if (comment && Object.keys(comment).length) {
@@ -146,14 +141,13 @@ router.delete("/:postid/comments/:commentid", async (req, res) => {
     } else {
       res.send("Comment not found");
     }
-  } catch (e) {
-    res.send(e);
-  }
-});
+  })
+);
 
 // Get All Users That Liked Post
-router.get("/:postid/likes", async (req, res) => {
-  try {
+router.get(
+  "/:postid/likes",
+  asyncHandler(async (req, res) => {
     const postId = req.params.postid;
     const likes = await likesServices.getAllUsersLiked(postId);
     if (likes && Object.keys(likes).length) {
@@ -161,14 +155,13 @@ router.get("/:postid/likes", async (req, res) => {
     } else {
       res.send("Users did not found");
     }
-  } catch (e) {
-    res.send(`Errors with getting users ${e}`);
-  }
-});
+  })
+);
 
 // Add Like
-router.post("/:postid/likes", async (req, res) => {
-  try {
+router.post(
+  "/:postid/likes",
+  asyncHandler(async (req, res) => {
     const userId = req.body;
     const postId = req.params.postid;
     const addLike = await likesServices.addLike(userId, postId);
@@ -177,14 +170,13 @@ router.post("/:postid/likes", async (req, res) => {
     } else {
       res.send("Post wasn`t liked");
     }
-  } catch (e) {
-    res.send(`Errors with liking ${e}`);
-  }
-});
+  })
+);
 
 // Delete Like
-router.delete("/:postid/likes", async (req, res) => {
-  try {
+router.delete(
+  "/:postid/likes",
+  asyncHandler(async (req, res) => {
     const userId = req.body;
     const postId = req.params.postid;
     const deleteLike = await likesServices.deleteLike(userId, postId);
@@ -193,9 +185,7 @@ router.delete("/:postid/likes", async (req, res) => {
     } else {
       res.send("Post wasn`t unliked");
     }
-  } catch (e) {
-    res.send(`Errors with unliking ${e}`);
-  }
-});
+  })
+);
 
 module.exports = router;
