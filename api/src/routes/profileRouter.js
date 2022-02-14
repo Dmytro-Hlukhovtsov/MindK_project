@@ -1,10 +1,12 @@
 const router = require("express").Router();
 const profileService = require("../services/store/profiles.service");
 const postsServices = require("../services/store/posts.service");
+const asyncHandler = require("../services/asyncHandler");
 
 // Get All Users
-router.get("/", async (req, res) => {
-  try {
+router.get(
+  "/",
+  asyncHandler(async (req, res) => {
     const limit = req.query.limit || 10;
     const page = req.query.page || 1;
     const offset = (page - 1) * limit;
@@ -16,14 +18,13 @@ router.get("/", async (req, res) => {
     } else {
       res.send("Users not found");
     }
-  } catch (e) {
-    res.send("Some error with fetching users");
-  }
-});
+  })
+);
 
 // Get One User
-router.get("/:userid", async (req, res) => {
-  try {
+router.get(
+  "/:userid",
+  asyncHandler(async (req, res) => {
     const user = await profileService.getProfileById(req.params.userid);
     if (user && user.length) {
       const universities = await profileService.getUniversitiesForProfile(
@@ -34,29 +35,28 @@ router.get("/:userid", async (req, res) => {
     } else {
       res.send("User not found");
     }
-  } catch (e) {
-    res.send("Some error with finding user");
-  }
-});
+  })
+);
 
 // Add User
-router.post("/", async (req, res) => {
-  const userInfo = req.body;
-  try {
+router.post(
+  "/",
+  asyncHandler(async (req, res) => {
+    const userInfo = req.body;
+
     const addUser = await profileService.addProfile(userInfo);
     if (addUser && Object.keys(addUser).length) {
       res.send(addUser);
     } else {
       res.send("User Not Created");
     }
-  } catch (e) {
-    res.send("Some error with adding data");
-  }
-});
+  })
+);
 
 // Update User
-router.put("/:userid", async (req, res) => {
-  try {
+router.put(
+  "/:userid",
+  asyncHandler(async (req, res) => {
     const user = req.body;
     const userId = req.params.userid;
 
@@ -66,16 +66,15 @@ router.put("/:userid", async (req, res) => {
     } else {
       res.send("User Not Updated");
     }
-  } catch (e) {
-    res.send("Something went wrong");
-  }
-});
+  })
+);
 
 // Delete User
-router.delete("/:userid", async (req, res) => {
-  const userId = req.params.userid;
+router.delete(
+  "/:userid",
+  asyncHandler(async (req, res) => {
+    const userId = req.params.userid;
 
-  try {
     const deleteUser = await profileService.deleteProfile(userId);
 
     if (deleteUser && Object.keys(deleteUser).length) {
@@ -83,26 +82,24 @@ router.delete("/:userid", async (req, res) => {
     } else {
       res.send("Profile Not Deleting");
     }
-  } catch (error) {
-    res.send("Data deleting error");
-  }
-});
+  })
+);
 
 // Get All User`s posts
-router.get("/:userid/posts", async (req, res) => {
-  const limit = req.query.limit || 10;
-  const page = req.query.page || 1;
-  const offset = (page - 1) * limit;
-  const userId = req.params.userid;
-  try {
+router.get(
+  "/:userid/posts",
+  asyncHandler(async (req, res) => {
+    const limit = req.query.limit || 10;
+    const page = req.query.page || 1;
+    const offset = (page - 1) * limit;
+    const userId = req.params.userid;
+
     const posts = await postsServices.getAllUsersPosts(userId, limit, offset);
     if (posts && Object.keys(posts).length) {
       res.send(posts);
     } else {
       res.send("Posts not found");
     }
-  } catch (e) {
-    res.send("Some error with fetching posts");
-  }
-});
+  })
+);
 module.exports = router;
