@@ -31,7 +31,7 @@ const ProfileComponent = ({ user }) => {
             />
           </Grid>
           <Grid item>
-            <AvatarUpload />
+            <AvatarUpload user={user} />
           </Grid>
         </Grid>
         <Grid

@@ -57,12 +57,18 @@ router.post(
 router.put(
   "/:userid",
   asyncHandler(async (req, res) => {
-    const user = req.body;
+    const { emailVisibility, phoneVisibility, ...user } = req.body;
+    const userVisibility = {};
+    userVisibility.emailVisibility = emailVisibility;
+    userVisibility.phoneVisibility = phoneVisibility;
     const userId = req.params.userid;
-
-    const updateUser = await profileService.updateProfile(user, userId);
+    const updateUser = await profileService.updateProfile(
+      user,
+      userVisibility,
+      userId
+    );
     if (updateUser && Object.keys(updateUser).length) {
-      res.send(updateUser);
+      res.send("User Updated");
     } else {
       res.send("User Not Updated");
     }

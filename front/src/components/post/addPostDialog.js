@@ -1,6 +1,6 @@
 import { Dialog, DialogContent, DialogTitle } from "@mui/material";
 import PropTypes from "prop-types";
-import AddPost from "./AddPost";
+import PostForm from "./PostForm";
 import postPropTypes from "../../PropTypes/PostPropTypes";
 
 const AddPostDialog = ({ isDialogOpened, closeDialog, post }) => {
@@ -12,7 +12,7 @@ const AddPostDialog = ({ isDialogOpened, closeDialog, post }) => {
     <Dialog open={isDialogOpened} onClose={handleClose}>
       <DialogTitle>Изменить пост</DialogTitle>
       <DialogContent>
-        <AddPost post={post} />
+        <PostForm post={post} />
       </DialogContent>
     </Dialog>
   );

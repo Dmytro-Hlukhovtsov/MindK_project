@@ -11,9 +11,9 @@ module.exports = {
     db
       .select(
         "Users.*",
-        "set1.type as emailsett",
-        "set2.type as phonesett",
-        "set3.type as universitysett"
+        "set1.visibility_id as emailsett",
+        "set2.visibility_id as phonesett",
+        "set3.visibility_id as universitysett"
       )
       .from("Users")
       .leftJoin(
@@ -43,7 +43,7 @@ module.exports = {
       )
 
       .where("Users.user_id", userid),
-  getUniversitiesForProfile: (userid) =>
+  getUniversitiesForProfile: async (userid) =>
     db
       .select("University.name")
       .from("University")
@@ -55,9 +55,15 @@ module.exports = {
       )
       .leftJoin("Users", "UniversityUsers.user_id", "=", "Users.user_id")
       .where("Users.user_id", userid),
-  addProfile: (userInfo) => db("Users").insert(userInfo, ["user_id"]),
-  updateProfile: (user, userId) =>
-    db("Users").where("user_id", userId).update(user).returning("*"),
-  deleteProfile: (userId) =>
+  addProfile: async (userInfo) => db("Users").insert(userInfo, ["user_id"]),
+  updateProfile: async (user, userVisibility, userId) =>
+    db.transaction(async () => {
+      await db("Users").where("user_id", userId).update(user);
+      await db("CurrentFieldVisible").where("user_id", userId).update({
+        email_visible: userVisibility.emailVisibility,
+        phone_visible: userVisibility.phoneVisibility,
+      });
+    }),
+  deleteProfile: async (userId) =>
     db.from("Users").where("user_id", userId).delete().returning("username"),
 };

@@ -1,19 +1,28 @@
 const multer = require("multer");
 const fs = require("fs");
+const { v4: uuidv4 } = require("uuid");
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    const path = `uploads/avatars/${req.params.profileid}`;
-    fs.stat(`src/${path}`, (err) => {
+    console.log(req.body);
+    const userID = req.params.profileid || req.body.user_id;
+    let fullPath = "";
+    const path = `uploads/users/${userID}`;
+    if (req.body.type === "post") {
+      fullPath = `${path}/posts`;
+    } else {
+      fullPath = `${path}/avatar`;
+    }
+    fs.stat(`src/${fullPath}`, (err) => {
       if (err) {
-        fs.mkdirSync(`src/${path}`, { recursive: true });
+        fs.mkdirSync(`src/${fullPath}`, { recursive: true });
       }
-      cb(null, `src/${path}`);
+      cb(null, `src/${fullPath}`);
     });
   },
   filename: (req, file, cb) => {
     const ext = file.mimetype.split("/")[1];
-    cb(null, `avatar.${ext}`);
+    cb(null, `${uuidv4()}.${ext}`);
   },
 });
 

@@ -8,13 +8,27 @@ import {
 } from "@mui/material";
 import * as yup from "yup";
 import { useMutation } from "react-query";
+import { useState } from "react";
 import { updatePost, addPost } from "../../containers/forms/api/formsApi";
+import PostImageUpload from "../../containers/forms/postImageUpload";
+import FormikAutoComplete from "../formik/FormikAutoComplete";
 
 const validationSchema = yup.object({
   text: yup.string().min(10, "Длина текста должна быть не менее 10 символов"),
 });
+const options = [
+  { value: 1, label: "All people" },
+  { value: 2, label: "My fans" },
+  { value: 3, label: "My folowers" },
+];
+const PostForm = ({ post = null }) => {
+  console.log(post);
+  const [postImage, setPostImage] = useState(null);
 
-const AddPost = ({ post = null }) => {
+  const handleSetPostImage = (image) => {
+    setPostImage(image);
+  };
+
   const addingPost = useMutation("addPost", (values) => addPost(values));
   const updatingPost = useMutation("updatePost", (values) =>
     updatePost(values)
@@ -25,22 +39,29 @@ const AddPost = ({ post = null }) => {
       ? {
           text: post.text,
           commentable: post.commentable,
+          type: "post",
+          oldLink: post.link,
+          link: post.link,
+          changed: true,
         }
       : {
           text: "",
           commentable: true,
+          type: "post",
+          user_id: 1,
         },
     validationSchema,
     onSubmit: (values) => {
       // eslint-disable-next-line no-unused-expressions
       post
-        ? updatingPost.mutate({ ...values, post_id: post.post_id })
+        ? updatingPost.mutate({
+            ...values,
+            link: postImage,
+            post_id: post.post_id,
+          })
         : addingPost.mutate({
             ...values,
-            visibility: 1,
-            link: null,
-            created_time: new Date(),
-            user_id: 1,
+            link: postImage,
           });
     },
   });
@@ -63,17 +84,23 @@ const AddPost = ({ post = null }) => {
         <FormControlLabel
           control={
             <Switch
-              defaultChecked
               id="commentable"
               name="commentable"
-              value={formik.values.commentable}
+              checked={formik.values.commentable}
               onChange={formik.handleChange}
             />
           }
           label="Возможность комментировать"
         />
       </FormGroup>
-
+      <PostImageUpload handlePostImage={handleSetPostImage} />
+      <FormikAutoComplete
+        name="visibility"
+        options={options}
+        optionNumber={post ? post.visibility : null}
+        sx={{ width: 300 }}
+        onChange={formik.setFieldValue}
+      />
       <Button color="primary" variant="contained" fullWidth type="submit">
         Submit
       </Button>
@@ -81,4 +108,4 @@ const AddPost = ({ post = null }) => {
   );
 };
 
-export default AddPost;
+export default PostForm;

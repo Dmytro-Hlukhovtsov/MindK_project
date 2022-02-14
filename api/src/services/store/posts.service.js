@@ -9,7 +9,7 @@ module.exports = {
         "Users.name",
         "Users.avatar",
         "Posts.*",
-        "vis.type",
+        "vis.visibility_id as visibility",
         "PostMedia.link"
       )
       .from("Posts")
@@ -17,7 +17,7 @@ module.exports = {
       .join("CurrentPostVisible as cpv", "cpv.post_id", "=", "Posts.post_id")
       .join("Visibility as vis", "vis.visibility_id", "=", "cpv.visibility_id")
       .leftJoin("PostMedia", "PostMedia.post_id", "=", "Posts.post_id")
-      .orderBy("Posts.created_time")
+      .orderBy("Posts.created_time", "desc")
       .limit(limit)
       .offset(offset),
   getAllUsersPosts: async (userId, limit, offset) =>
@@ -28,10 +28,13 @@ module.exports = {
         "Users.name",
         "Users.avatar",
         "Posts.*",
+        "vis.visibility_id as visibility",
         "PostMedia.link"
       )
       .from("Posts")
       .join("Users", "Posts.user_id", "=", "Users.user_id")
+      .join("CurrentPostVisible as cpv", "cpv.post_id", "=", "Posts.post_id")
+      .join("Visibility as vis", "vis.visibility_id", "=", "cpv.visibility_id")
       .leftJoin("PostMedia", "PostMedia.post_id", "=", "Posts.post_id")
       .where("Users.user_id", userId)
       .orderBy("Posts.created_time")
@@ -45,7 +48,7 @@ module.exports = {
         "Users.name",
         "Users.avatar",
         "Posts.*",
-        "vis.type",
+        "vis.visibility_id as visibility",
         "PostMedia.link"
       )
       .from("Posts")
@@ -57,12 +60,12 @@ module.exports = {
   addPostTransaction: async (postData, postMedia, visible) =>
     db.transaction(async () => {
       const addPost = await db("Posts").insert(postData, "post_id");
-
+      console.log(addPost);
       await db("PostMedia").insert({ post_id: addPost[0], link: postMedia });
 
       await db("CurrentPostVisible").insert({
         visibility_id: visible,
-        post_id: addPost[0].postId,
+        post_id: addPost[0],
       });
     }),
   updatePostTransaction: async (postData, postMedia, visible, postid) =>
@@ -78,7 +81,7 @@ module.exports = {
       await db("CurrentPostVisible")
         .update({
           visibility_id: visible,
-          post_id: updatePost[0].postId,
+          post_id: updatePost[0],
         })
         .where("post_id", postid);
     }),
