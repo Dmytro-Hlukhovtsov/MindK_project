@@ -1,15 +1,14 @@
-export function PostHeader({ logo, username = "default", tag = "default" }) {
-  console.log(logo);
+import { Avatar, CardHeader } from "@mui/material";
+import PostActionsBtn from "../postActionsBtn";
+
+export function PostHeader({ post }) {
   return (
-    <div className="post-header">
-      <div className="user-block">
-        <img src={logo} alt="avatar" />
-        <div className="user-names-block">
-          <p className="username">{username}</p>
-          <p className="tag">@{tag}</p>
-        </div>
-      </div>
-      <button type="button">Follow</button>
-    </div>
+    <CardHeader
+      avatar={
+        <Avatar sx={{ width: 75, height: 75 }} alt="avatar" src={post.avatar} />
+      }
+      action={<PostActionsBtn post={post} />}
+      title={post.username}
+    />
   );
 }

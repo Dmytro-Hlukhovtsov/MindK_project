@@ -1,45 +1,95 @@
 import PropTypes from "prop-types";
+import { Avatar, Grid, Typography } from "@mui/material";
+import { useState } from "react";
+import AvatarUpload from "../../containers/forms/avatarUpload";
+import ChangeProfileFormDialog from "./changeProfileFormDialog";
 
 const profilePropTypes = require("../../PropTypes/ProfilePropTypes");
 
-const ProfileComponent = ({ user }) => (
-  <div className="profile-block">
-    <div className="profile-block-header">
-      <div className="profile-block-avatar">
-        <img src={user.avatar} alt="avatar" />
-        <form
-          className="add-avatar-form"
-          action={`http://localhost:3001/files/${user.user_id}/avatar`}
-          encType="multipart/form-data"
-          method="POST"
+const ProfileComponent = ({ user }) => {
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const handleDialogClose = () => {
+    setDialogOpen(false);
+  };
+  const openEditingDialog = () => {
+    setDialogOpen(true);
+  };
+  return (
+    <Grid container maxWidth="md" className="profile-block">
+      <Grid container className="profile-block-header" justifyContent="center">
+        <Grid
+          container
+          className="profile-block-avatar"
+          xs={4}
+          justifyContent="center"
         >
-          <input type="file" name="user-avatar" />
-          <button type="submit"> Добавить аватар </button>
-        </form>
-      </div>
-      <div className="profile-block-naming">
-        <h3>{user.username}</h3>
-        <h3>{user.name}</h3>
-      </div>
-      <button type="button">Добавить</button>
-    </div>
-    <div className="profile-block-contacts">
-      <h3>Phone</h3>
-      <h3>{user.email}</h3>
-    </div>
-  </div>
-);
+          <Grid item>
+            <Avatar
+              alt="logo"
+              src={user.avatar}
+              sx={{ width: 200, height: 200 }}
+            />
+          </Grid>
+          <Grid item>
+            <AvatarUpload />
+          </Grid>
+        </Grid>
+        <Grid
+          container
+          className="profile-block-naming-contacts"
+          xs={4}
+          direction="column"
+          justifyContent="space-between"
+          textAlign="left"
+        >
+          <Grid
+            container
+            spacing={2}
+            flexDirection="column"
+            alignItems="flexStart"
+            xs={4}
+          >
+            <Grid item>
+              {user.username && (
+                <Typography component="div">{user.username}</Typography>
+              )}
+            </Grid>
+            <Grid item>
+              {user.name && (
+                <Typography component="div">{user.name}</Typography>
+              )}
+            </Grid>
+          </Grid>
 
+          <Grid container spacing={2} xs={8}>
+            <Grid item>
+              <Typography>Email:</Typography>
+              {user.email && (
+                <Typography component="div">{user.email}</Typography>
+              )}
+            </Grid>
+            <Grid item>
+              <Typography>Phone:</Typography>
+              {user.phone && (
+                <Typography component="div">{user.phone}</Typography>
+              )}
+            </Grid>
+          </Grid>
+        </Grid>
+        <button type="button" onClick={openEditingDialog}>
+          Добавить
+        </button>
+      </Grid>
+      <ChangeProfileFormDialog
+        isDialogOpened={dialogOpen}
+        closeDialog={() => handleDialogClose()}
+        user={user}
+      />
+    </Grid>
+  );
+};
 ProfileComponent.propTypes = {
   user: PropTypes.shape(profilePropTypes),
-};
-
-ProfileComponent.defaultProps = {
-  user: {
-    avatar: "http://localhost:3001/uploads/avatars/default.png",
-    name: null,
-    email: null,
-  },
 };
 
 export default ProfileComponent;

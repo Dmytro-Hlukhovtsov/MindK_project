@@ -6,7 +6,7 @@ const likesServices = require("../services/store/likes.service");
 // Get All Posts
 router.get("/", async (req, res) => {
   try {
-    const limit = req.query.limited || 10;
+    const limit = req.query.limit || 10;
     const page = req.query.page || 1;
     const offset = (page - 1) * limit;
     const posts = await postServices.getAllPosts(limit, offset);
