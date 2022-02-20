@@ -4,6 +4,10 @@ const commentServices = require("../services/store/comments.service");
 const likesServices = require("../services/store/likes.service");
 
 const asyncHandler = require("../services/asyncHandler");
+const upload = require("../services/multerConfig");
+const config = require("../services/config");
+
+const removeOldPostImage = require("../services/fileStorage/deleteFile");
 
 // Get All Posts
 router.get(
@@ -38,13 +42,20 @@ router.get(
 // Add Post
 router.post(
   "/",
+  upload.single("link"),
   asyncHandler(async (req, res) => {
     const postData = req.body;
     const visible = postData.visibility;
-    const postMedia = postData.link;
+    let link = null;
     delete postData.visibility;
     delete postData.link;
-    await postServices.addPostTransaction(postData, postMedia, visible);
+    delete postData.type;
+    if (req.file) {
+      const image = req.file.path;
+      link = `${config.serverURL}${image.split("src/")[1]}`;
+    }
+
+    await postServices.addPostTransaction(postData, link, visible);
     res.send("Post Added");
   })
 );
@@ -52,20 +63,28 @@ router.post(
 // Update Post
 router.put(
   "/:postid",
+  upload.single("link"),
   asyncHandler(async (req, res) => {
     const postData = req.body;
+    console.log(postData);
     const visible = postData.visibility;
-    const postMedia = postData.link;
+    const { oldLink } = postData;
+    const postId = req.params.postid;
+    let link = null;
     delete postData.visibility;
     delete postData.link;
-    const postId = req.params.postid;
+    delete postData.oldLink;
+    delete postData.type;
 
-    await postServices.updatePostTransaction(
-      postData,
-      postMedia,
-      visible,
-      postId
-    );
+    if (req.file) {
+      const image = req.file.path;
+      link = `${config.serverURL}${image.split("src/")[1]}`;
+      if (oldLink) {
+        removeOldPostImage(oldLink);
+      }
+    }
+
+    await postServices.updatePostTransaction(postData, link, visible, postId);
 
     res.send("Post Updated");
   })

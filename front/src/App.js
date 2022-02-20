@@ -9,7 +9,7 @@ import {
 
 import "./App.css";
 import { QueryClient, QueryClientProvider } from "react-query";
-import AddPost from "./components/post/AddPost";
+import PostForm from "./components/post/PostForm";
 import ErrorBoundary from "./components/ErrorBoundary";
 import PostsContainer from "./containers/post/allPosts";
 import OnePostContainer from "./containers/post/singlePost";
@@ -59,7 +59,7 @@ function App() {
                 <Route path="/" element="Это главная" />
                 <Route path="/posts" element={<PostsContainer />} />
 
-                <Route path="/posts/add-post" element={<AddPost />} />
+                <Route path="/posts/add-post" element={<PostForm />} />
                 <Route path="/profiles" element={<ProfilesContainer />} />
 
                 <Route

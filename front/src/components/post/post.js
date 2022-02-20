@@ -7,7 +7,11 @@ export function ShowPost({ post }) {
   return (
     <Card className="post-card" sx={{ maxWidth: 500, minWidth: 400 }}>
       <PostHeader post={post} />
-      <PostBody text={post.text} timestamp={post.created_time} />
+      <PostBody
+        text={post.text}
+        timestamp={post.created_time}
+        link={post.link}
+      />
       <PostFooter
         totalComments={post.total_comments}
         likes={post.total_likes}
