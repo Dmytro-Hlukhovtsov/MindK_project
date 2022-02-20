@@ -9,6 +9,9 @@ const config = require("../services/config");
 
 const removeOldPostImage = require("../services/fileStorage/deleteFile");
 
+const auth = require("../middlewares/authMiddleware");
+
+router.use(auth);
 // Get All Posts
 router.get(
   "/",
@@ -52,7 +55,7 @@ router.post(
     delete postData.type;
     if (req.file) {
       const image = req.file.path;
-      link = `${config.serverURL}${image.split("src/")[1]}`;
+      link = `${config.app.serverURL}${image.split("src/")[1]}`;
     }
 
     await postServices.addPostTransaction(postData, link, visible);
@@ -78,7 +81,7 @@ router.put(
 
     if (req.file) {
       const image = req.file.path;
-      link = `${config.serverURL}${image.split("src/")[1]}`;
+      link = `${config.app.serverURL}${image.split("src/")[1]}`;
       if (oldLink) {
         removeOldPostImage(oldLink);
       }

@@ -11,7 +11,7 @@ router.post(
   asyncHandler(async (req, res) => {
     const userId = req.params.profileid;
     const avatar = req.file.path;
-    const link = `${config.serverURL}${avatar.split("src/")[1]}`;
+    const link = `${config.app.serverURL}${avatar.split("src/")[1]}`;
     if (req.body.oldLink) {
       removeOldAvatar(req.body.oldLink);
     }

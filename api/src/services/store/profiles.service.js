@@ -55,7 +55,7 @@ module.exports = {
       )
       .leftJoin("Users", "UniversityUsers.user_id", "=", "Users.user_id")
       .where("Users.user_id", userid),
-  addProfile: async (userInfo) => db("Users").insert(userInfo, ["user_id"]),
+  addProfile: async (userInfo) => db("Users").insert(userInfo),
   updateProfile: async (user, userVisibility, userId) =>
     db.transaction(async () => {
       await db("Users").where("user_id", userId).update(user);
@@ -66,4 +66,11 @@ module.exports = {
     }),
   deleteProfile: async (userId) =>
     db.from("Users").where("user_id", userId).delete().returning("username"),
+  getByEmailOrPhone: async (search) =>
+    db
+      .select()
+      .first()
+      .from("Users")
+      .where("email", search)
+      .orWhere("phone", search),
 };

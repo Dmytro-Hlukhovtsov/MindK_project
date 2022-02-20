@@ -15,6 +15,7 @@ import PostsContainer from "./containers/post/allPosts";
 import OnePostContainer from "./containers/post/singlePost";
 import ProfilesContainer from "./containers/profile/allProfiles";
 import ProfileContainer from "./containers/profile/profile";
+import Login from "./components/auth/login";
 
 const queryClient = new QueryClient();
 
@@ -66,7 +67,7 @@ function App() {
                   path="/profiles/:userid"
                   element={<ProfileContainer />}
                 />
-
+                <Route path="/login" element={<Login />} />
                 <Route path="/posts/:id" element={<OnePostContainer />} />
                 <Route path="/date/:data" element={<DataCheck />} />
                 <Route path="*" element={<div>404</div>} />
