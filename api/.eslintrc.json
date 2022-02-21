@@ -18,6 +18,7 @@
             {
                 "endOfLine": "auto"
             }
-        ]
+        ],
+        "consistent-return": "off"
     }
 }

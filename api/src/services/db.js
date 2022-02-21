@@ -3,9 +3,9 @@ const config = require("./config");
 module.exports = require("knex")({
   client: "pg",
   connection: {
-    host: config.dbHost,
-    user: config.dbUser,
-    password: config.dbPassword,
-    database: config.dbDatabase,
+    host: config.db.dbHost,
+    user: config.db.dbUser,
+    password: config.db.dbPassword,
+    database: config.db.dbDatabase,
   },
 });
