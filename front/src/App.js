@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   BrowserRouter,
   Routes,
@@ -16,6 +16,7 @@ import OnePostContainer from "./containers/post/singlePost";
 import ProfilesContainer from "./containers/profile/allProfiles";
 import ProfileContainer from "./containers/profile/profile";
 import Login from "./components/auth/login";
+import authContext from "./authContext";
 
 const queryClient = new QueryClient();
 
@@ -35,45 +36,54 @@ function DataCheck() {
 }
 
 function App() {
+  // eslint-disable-next-line no-unused-vars
+  const [userData, setUserData] = useState({
+    authenticated: true,
+    user: { id: 1 },
+    setUserData: () => {},
+  });
+
   return (
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
         <div className="App">
-          <ErrorBoundary>
-            <div className="header">
-              <ul>
-                <li>
-                  <Link to="/posts">Posts</Link>
-                </li>
-                <li>
-                  <Link to="/posts/add-post">Add Post</Link>
-                </li>
-                <li>
-                  <Link to="/profiles">Profile</Link>
-                </li>
-              </ul>
-            </div>
-          </ErrorBoundary>
-          <div className="body">
+          <authContext.Provider value={userData}>
             <ErrorBoundary>
-              <Routes>
-                <Route path="/" element="Это главная" />
-                <Route path="/posts" element={<PostsContainer />} />
-
-                <Route path="/posts/add-post" element={<PostForm />} />
-                <Route path="/profiles" element={<ProfilesContainer />} />
-
-                <Route
-                  path="/profiles/:userid"
-                  element={<ProfileContainer />}
-                />
-                <Route path="/login" element={<Login />} />
-                <Route path="/posts/:id" element={<OnePostContainer />} />
-                <Route path="/date/:data" element={<DataCheck />} />
-                <Route path="*" element={<div>404</div>} />
-              </Routes>
+              <div className="header">
+                <ul>
+                  <li>
+                    <Link to="/posts">Posts</Link>
+                  </li>
+                  <li>
+                    <Link to="/posts/add-post">Add Post</Link>
+                  </li>
+                  <li>
+                    <Link to="/profiles">Profile</Link>
+                  </li>
+                </ul>
+              </div>
             </ErrorBoundary>
-          </div>
+            <div className="body">
+              <ErrorBoundary>
+                <Routes>
+                  <Route path="/" element="Это главная" />
+                  <Route path="/posts" element={<PostsContainer />} />
+
+                  <Route path="/posts/add-post" element={<PostForm />} />
+                  <Route path="/profiles" element={<ProfilesContainer />} />
+
+                  <Route
+                    path="/profiles/:userid"
+                    element={<ProfileContainer />}
+                  />
+                  <Route path="/login" element={<Login />} />
+                  <Route path="/posts/:id" element={<OnePostContainer />} />
+                  <Route path="/date/:data" element={<DataCheck />} />
+                  <Route path="*" element={<div>404</div>} />
+                </Routes>
+              </ErrorBoundary>
+            </div>
+          </authContext.Provider>
         </div>
       </BrowserRouter>
     </QueryClientProvider>

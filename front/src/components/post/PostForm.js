@@ -8,10 +8,11 @@ import {
 } from "@mui/material";
 import * as yup from "yup";
 import { useMutation } from "react-query";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { updatePost, addPost } from "../../containers/forms/api/formsApi";
 import PostImageUpload from "../../containers/forms/postImageUpload";
 import FormikAutoComplete from "../formik/FormikAutoComplete";
+import authContext from "../../authContext";
 
 const validationSchema = yup.object({
   text: yup.string().min(10, "Длина текста должна быть не менее 10 символов"),
@@ -22,7 +23,10 @@ const options = [
   { value: 3, label: "My folowers" },
 ];
 const PostForm = ({ post = null }) => {
-  console.log(post);
+  // eslint-disable-next-line no-unused-vars
+  const { authenticated, user, setUserData } = useContext(authContext);
+  console.log("is authenticated:", authenticated);
+  console.log("user:", user);
   const [postImage, setPostImage] = useState(null);
 
   const handleSetPostImage = (image) => {
