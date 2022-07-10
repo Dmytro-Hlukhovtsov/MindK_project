@@ -15,6 +15,7 @@ module.exports = {
         "set2.visibility_id as phonesett",
         "set3.visibility_id as universitysett"
       )
+      .first()
       .from("Users")
       .leftJoin(
         "CurrentFieldVisible as cfv",

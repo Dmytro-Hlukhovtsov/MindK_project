@@ -13,6 +13,7 @@ module.exports = {
         { user_id: user.id, name: user.name },
         config.app.appKey
       );
+      // eslint-disable-next-line no-shadow
       const refreshToken = uuidv4();
       await sessionService.deleteByToken(session.token);
       await sessionService.create({
@@ -27,12 +28,12 @@ module.exports = {
     const user = await userService.getProfileById(id);
     if (user) {
       const accessToken = jwt.sign(
-        { user_id: user[0].user_id, name: user[0].name },
+        { user_id: user.user_id, name: user.name },
         config.app.appKey
       );
       const refreshToken = uuidv4();
       await sessionService.create({
-        user_id: user[0].user_id,
+        user_id: user.user_id,
         token: refreshToken,
       });
       return { accessToken, refreshToken };

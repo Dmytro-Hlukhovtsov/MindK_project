@@ -10,11 +10,19 @@ const config = require("../services/config");
 const removeOldPostImage = require("../services/fileStorage/deleteFile");
 
 const auth = require("../middlewares/authMiddleware");
+const aclMiddleware = require("../middlewares/aclMiddleware");
 
 router.use(auth);
 // Get All Posts
 router.get(
   "/",
+  aclMiddleware([
+    {
+      resource: "post",
+      action: "read",
+      possession: "any",
+    },
+  ]),
   asyncHandler(async (req, res) => {
     const limit = req.query.limit || 10;
     const page = req.query.page || 1;
@@ -31,6 +39,13 @@ router.get(
 // Get One Post
 router.get(
   "/:postid",
+  aclMiddleware([
+    {
+      resource: "post",
+      action: "read",
+      possession: "any",
+    },
+  ]),
   asyncHandler(async (req, res) => {
     const postId = req.params.postid;
     const post = await postServices.getOnePost(postId);
@@ -45,6 +60,13 @@ router.get(
 // Add Post
 router.post(
   "/",
+  aclMiddleware([
+    {
+      resource: "post",
+      action: "create",
+      possession: "any",
+    },
+  ]),
   upload.single("link"),
   asyncHandler(async (req, res) => {
     const postData = req.body;
@@ -66,6 +88,16 @@ router.post(
 // Update Post
 router.put(
   "/:postid",
+
+  aclMiddleware([
+    {
+      resource: "post",
+      action: "update",
+      possession: "own",
+      getResource: (req) => postServices.getOnePost(req.params.postid),
+      isOwn: (resource, userId) => resource[0].user_id === userId,
+    },
+  ]),
   upload.single("link"),
   asyncHandler(async (req, res) => {
     const postData = req.body;
@@ -96,6 +128,15 @@ router.put(
 // Delete Post
 router.delete(
   "/:postid",
+  aclMiddleware([
+    {
+      resource: "post",
+      action: "delete",
+      possession: "any",
+      getResource: (req) => postServices.getOnePost(req.params.postid),
+      isOwn: (resource, userId) => resource.user_id === userId,
+    },
+  ]),
   asyncHandler(async (req, res) => {
     const postId = req.params.postid;
 
