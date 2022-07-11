@@ -1,7 +1,7 @@
 const db = require("../db");
 
 module.exports = {
-  checkRules: async (resource, action, possesions, role) =>
+  checkRules: async (resource, role) =>
     db
       .select(
         "Actions.name as action",
@@ -15,8 +15,6 @@ module.exports = {
       .join("Resources", "Resources.resource_id", "=", "Rules.resource_id")
       .join("Roles", "Roles.role_id", "=", "Rules.role_id")
       .where({
-        "Actions.name": action,
-        "Possesions.name": possesions,
         "Resources.name": resource,
         "Roles.name": role,
       }),

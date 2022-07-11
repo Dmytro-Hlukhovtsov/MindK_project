@@ -10,26 +10,27 @@ module.exports = (rule) => async (req, res, next) => {
   if (user) {
     const userRole = await aclService.getUserRole(user.user_id);
     if (userRole) {
-      if (userRole.name === "admin") {
-        isAllow = true;
-      }
       // eslint-disable-next-line no-restricted-syntax
       for await (const checkRule of rules) {
         const permissions = await aclService.checkRules(
           checkRule.resource,
-          checkRule.action,
-          checkRule.possession,
           userRole.name
         );
         console.log(permissions);
         if (permissions && permissions.length !== 0) {
-          if (permissions[0].possesions === "any") {
-            console.log("hello");
-            isAllow = true;
-          } else {
-            const resource = await checkRule.getResource(req);
-            if (checkRule.isOwn(resource, user.user_id)) {
+          // eslint-disable-next-line no-restricted-syntax
+          for await (const permission of permissions) {
+            if (
+              permission.possesions === "any" &&
+              checkRule.action === permission.action
+            ) {
               isAllow = true;
+            } else if (checkRule.getResource) {
+              const resource = await checkRule.getResource(req);
+              console.log("hello1");
+              if (checkRule.isOwn(resource, user.user_id)) {
+                isAllow = true;
+              }
             }
           }
         }
