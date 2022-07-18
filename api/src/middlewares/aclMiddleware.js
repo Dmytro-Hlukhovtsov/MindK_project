@@ -5,7 +5,6 @@ const aclService = require("../services/store/acl.service");
 module.exports = (rule) => async (req, res, next) => {
   const rules = Array.isArray(rule) ? rule : [rule];
   let isAllow = false;
-  console.log(rules);
   const user = await userService.getProfileById(req.auth.user_id);
   if (user) {
     const userRole = await aclService.getUserRole(user.user_id);
@@ -27,7 +26,7 @@ module.exports = (rule) => async (req, res, next) => {
               isAllow = true;
             } else if (checkRule.getResource) {
               const resource = await checkRule.getResource(req);
-              console.log("hello1");
+              console.log("resource", resource);
               if (checkRule.isOwn(resource, user.user_id)) {
                 isAllow = true;
               }
