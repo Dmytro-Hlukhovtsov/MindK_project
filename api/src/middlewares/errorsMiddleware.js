@@ -1,6 +1,7 @@
 // eslint-disable-next-line no-unused-vars
 const UnauthorizedException = require("../errors/UnauthorizedException");
 const ForbiddenException = require("../errors/ForbiddenException");
+const UnprocessableEntityException = require("../errors/UnprocessableEntityException");
 
 module.exports = (err, req, res, next) => {
   console.log("_______________________");
@@ -13,5 +14,9 @@ module.exports = (err, req, res, next) => {
   if (err instanceof ForbiddenException) {
     return res.status(403).send({ error: "Forbidden" });
   }
+  if (err instanceof UnprocessableEntityException) {
+    return res.status(422).send({ error: err.msg });
+  }
+
   res.status(500).send("Something went wrong, on no!");
 };

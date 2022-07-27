@@ -11,6 +11,7 @@ const removeOldPostImage = require("../services/fileStorage/deleteFile");
 
 const auth = require("../middlewares/authMiddleware");
 const aclMiddleware = require("../middlewares/aclMiddleware");
+const validationMiddleware = require("../middlewares/validationMiddleware");
 
 router.use(auth);
 // Get All Posts
@@ -67,6 +68,15 @@ router.post(
       possession: "any",
     },
   ]),
+  validationMiddleware({
+    text: [
+      "required",
+      "regex:[a-z0-9]",
+      "min:5",
+      "max:20",
+      `unique: Posts, text, postid`,
+    ],
+  }),
   upload.single("link"),
   asyncHandler(async (req, res) => {
     const postData = req.body;
@@ -98,10 +108,18 @@ router.put(
       isOwn: (resource, userId) => resource[0].user_id === userId,
     },
   ]),
+  validationMiddleware({
+    text: [
+      "required",
+      "regex:[a-z0-9]",
+      "min:5",
+      "max:20",
+      `unique: Posts, text, postid`,
+    ],
+  }),
   upload.single("link"),
   asyncHandler(async (req, res) => {
     const postData = req.body;
-    console.log(postData);
     const visible = postData.visibility;
     const { oldLink } = postData;
     const postId = req.params.postid;

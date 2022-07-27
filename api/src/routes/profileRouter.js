@@ -2,7 +2,12 @@ const router = require("express").Router();
 const profileService = require("../services/store/profiles.service");
 const postsServices = require("../services/store/posts.service");
 const asyncHandler = require("../services/asyncHandler");
+const aclMiddleware = require("../middlewares/aclMiddleware");
+const validationMiddleware = require("../middlewares/validationMiddleware");
+const auth = require("../middlewares/authMiddleware");
+const postServices = require("../services/store/posts.service");
 
+router.use(auth);
 // Get All Users
 router.get(
   "/",
@@ -56,11 +61,33 @@ router.post(
 // Update User
 router.put(
   "/:userid",
+  aclMiddleware([
+    {
+      resource: "user",
+      action: "update",
+      possession: "own",
+      getResource: (req) => profileService.getProfileById(req.params.userid),
+      isOwn: (resource, userId) => resource.user_id === userId,
+    },
+  ]),
+  validationMiddleware({
+    username: [
+      "regex:[a-z0-9]",
+      "min:5",
+      "max:20",
+      `unique: Users, username, userid`,
+    ],
+    phone: ["phone"],
+  }),
   asyncHandler(async (req, res) => {
     const { emailVisibility, phoneVisibility, ...user } = req.body;
     const userVisibility = {};
     userVisibility.emailVisibility = emailVisibility;
     userVisibility.phoneVisibility = phoneVisibility;
+
+    delete user.emailVisibility;
+    delete user.phoneVisibility;
+    console.log("user", user);
     const userId = req.params.userid;
     const updateUser = await profileService.updateProfile(
       user,
