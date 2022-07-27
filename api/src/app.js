@@ -6,6 +6,7 @@ const cookieParser = require("cookie-parser");
 const db = require("./services/db");
 require("./services/strategies/google.strategy");
 require("./services/strategies/facebook.strategy");
+require("./services/strategies/general.strategy");
 
 // Config
 const config = require("./services/config");

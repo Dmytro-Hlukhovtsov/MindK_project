@@ -51,6 +51,7 @@ router.get(
     const postId = req.params.postid;
     const post = await postServices.getOnePost(postId);
     if (post && Object.keys(post).length) {
+      console.log(res);
       res.send(post);
     } else {
       res.send("Post not found");

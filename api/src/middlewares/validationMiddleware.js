@@ -13,6 +13,7 @@ module.exports = (validationRules) => async (req, res, next) => {
     // eslint-disable-next-line no-restricted-syntax
     for await (const ruleValidate of rules) {
       const [rule, param] = ruleValidate.split(":");
+      // eslint-disable-next-line default-case
       switch (rule) {
         case "required":
           if (!req.body[field]) {
@@ -58,17 +59,16 @@ module.exports = (validationRules) => async (req, res, next) => {
           break;
         case "unique": {
           const additionalParams = param.split(",");
+          const table = additionalParams[0];
+          const column = additionalParams[1];
+
           const id =
             additionalParams.length === 3
               ? req.params[additionalParams[2]]
               : null;
-          console.log(req.params[additionalParams[2].trim()]);
-          const result = await getByParams(
-            additionalParams[0],
-            additionalParams[1],
-            req.body[field],
-            id
-          );
+          console.log(field, req.body);
+
+          const result = await getByParams(table, column, req.body[field], id);
           if (result.length !== 0) {
             fieldErrors.push(`${field} is presented`);
           }

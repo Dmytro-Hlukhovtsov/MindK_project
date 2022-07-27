@@ -56,7 +56,7 @@ module.exports = {
       )
       .leftJoin("Users", "UniversityUsers.user_id", "=", "Users.user_id")
       .where("Users.user_id", userid),
-  addProfile: async (userInfo) => db("Users").insert(userInfo),
+  addProfile: async (userInfo) => db("Users").insert(userInfo, "user_id"),
   updateProfile: async (user, userVisibility, userId) =>
     db.transaction(async () => {
       await db("Users").where("user_id", userId).update(user);

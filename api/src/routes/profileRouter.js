@@ -5,7 +5,6 @@ const asyncHandler = require("../services/asyncHandler");
 const aclMiddleware = require("../middlewares/aclMiddleware");
 const validationMiddleware = require("../middlewares/validationMiddleware");
 const auth = require("../middlewares/authMiddleware");
-const postServices = require("../services/store/posts.service");
 
 router.use(auth);
 // Get All Users
@@ -36,6 +35,7 @@ router.get(
         req.params.userid
       );
       user[0].universities = universities;
+
       res.send(user);
     } else {
       res.send("User not found");
