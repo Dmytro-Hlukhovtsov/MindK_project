@@ -43,7 +43,7 @@
 .body a{
   text-decoration: none;
   width: 40%;
-  margin: 20px 0px;
+  margin: 20px 0;
 }
 /*.body form{
   display: flex;
@@ -69,6 +69,21 @@
   color: white;
   font-size: 12pt;
 }
+.posts-container{
+  display: flex !important;
+  flex-direction: column;
+  align-items: center;
+}
+.post-modal-wrapper{
+
+  background-color: white;
+}
+.post-modal-wrapper .post-modal{
+}
+.post-link{
+  display: inline-flex;
+}
+
 .post-card{
   border: 2px solid #d2c8c8;
   border-radius: 15px;
@@ -99,7 +114,9 @@
     align-items: flex-start;
     justify-content: flex-end;
   }
-
+.comment-btn-block p{
+  margin: auto;
+}
 .user-names-block p{
   margin: 5px;
 }
@@ -113,6 +130,49 @@
   font-size: 14pt;
   color: #d2c8c8;
 }
+
+.comments-wrapper {
+  padding: 15px;
+  width: 450px;
+}
+.comments-wrapper .comments-block-header span{
+  font-size: 14pt;
+}
+.comment-childs-wrapper{
+  margin-left: 10px;
+}
+.comment-add-block{
+  padding: 10px;
+  display: flex;
+}
+.comment-header{
+  display: flex;
+  justify-content: space-between;
+}
+.comment-header button{
+  padding: 0;
+}
+.comment-header a{
+  margin: 0;
+  width: 100%;
+}
+
+.comment-modal{
+  width: 500px;
+
+  background-color: #f9f9f9;
+
+}
+.comment-modal .comment-modal-header{
+  padding: 10px;
+  background-color: #418dd4;
+  color: white;
+}
+.comment-modal .comment-modal-body{
+  padding: 10px;
+  display: flex;
+}
+
 
 
 

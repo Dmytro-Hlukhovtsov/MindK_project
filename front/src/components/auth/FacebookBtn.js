@@ -1,16 +1,20 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useContext } from "react";
 import FacebookLogin from "react-facebook-login";
+import jwtDecode from "jwt-decode";
 import { apiClient } from "../../config/axios";
 import configs from "../../configs";
+import authContext from "../../authContext";
 
-const FacebookBtn = ({ setAuth }) => {
+const FacebookBtn = () => {
+  const { setContext } = useContext(authContext);
   const onFacebookAuthSuccess = useCallback((data) => {
     apiClient
       .post(`/auth/facebook`, {
         access_token: data.accessToken,
       })
       .then((res) => {
-        setAuth(res.data);
+        setContext({ token: res.data, user: jwtDecode(res.data.accessToken) });
+        localStorage.setItem("token", JSON.stringify(res.data));
       })
       .catch((err) => {
         // eslint-disable-next-line no-console

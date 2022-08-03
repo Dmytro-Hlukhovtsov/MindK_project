@@ -19,8 +19,8 @@ const validationSchema = Yup.object({
     .required("Password is required"),
 });
 
-const LoginForm = ({ setAuth }) => {
-  const { context, setContext } = useContext(authContext);
+const LoginForm = () => {
+  const { setContext } = useContext(authContext);
   const login = useMutation("login", (values) => loginUser(values));
   const formik = useFormik({
     initialValues: {
@@ -34,7 +34,6 @@ const LoginForm = ({ setAuth }) => {
         { ...values },
         {
           onSuccess: ({ data }) => {
-            console.log(data);
             setContext({ token: data, user: jwtDecode(data.accessToken) });
             localStorage.setItem("token", JSON.stringify(data));
           },
@@ -90,8 +89,8 @@ const LoginForm = ({ setAuth }) => {
         </Button>
       </form>
       <div className="auth-footer-block">
-        <GoogleBtn setAuth={setAuth} />
-        <FacebookBtn setAuth={setAuth} />
+        <GoogleBtn />
+        <FacebookBtn />
       </div>
     </div>
   );

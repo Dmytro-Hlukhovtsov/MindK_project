@@ -25,7 +25,7 @@ router.get(
     },
   ]),
   asyncHandler(async (req, res) => {
-    const limit = req.query.limit || 10;
+    const limit = req.query.limit || 100;
     const page = req.query.page || 1;
     const offset = (page - 1) * limit;
     const posts = await postServices.getAllPosts(limit, offset);
@@ -51,7 +51,6 @@ router.get(
     const postId = req.params.postid;
     const post = await postServices.getOnePost(postId);
     if (post && Object.keys(post).length) {
-      console.log(res);
       res.send(post);
     } else {
       res.send("Post not found");
@@ -110,13 +109,7 @@ router.put(
     },
   ]),
   validationMiddleware({
-    text: [
-      "required",
-      "regex:[a-z0-9]",
-      "min:5",
-      "max:20",
-      `unique: Posts, text, postid`,
-    ],
+    text: ["required", "min:5", "max:20", `unique: Posts, text, postid`],
   }),
   upload.single("link"),
   asyncHandler(async (req, res) => {
@@ -189,6 +182,8 @@ router.post(
   asyncHandler(async (req, res) => {
     const commData = req.body;
     const comment = await commentServices.addComment(commData);
+    const io = req.app.get("socketio");
+    io.to(req.params.postid).emit("comments:get", req.params.postid);
     if (comment && Object.keys(comment).length) {
       res.send(comment);
     } else {
@@ -204,6 +199,7 @@ router.put(
     const commData = req.body;
     const commId = req.params.commentid;
     const comment = await commentServices.updateComment(commData, commId);
+
     if (comment && Object.keys(comment).length) {
       res.send("Comment was updated");
     } else {

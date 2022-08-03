@@ -8,17 +8,20 @@ const PostsContainer = () => {
   const { isFetching, data } = useQuery("posts", () => getAllPosts());
 
   const posts = data?.data;
-
   const postsList = posts?.map((post) => (
-    <Link to={`/posts/${post.post_id}`} key={post.post_id}>
-      <PostContainer post={post} />
+    <Link
+      to={`/posts/${post.post_id}`}
+      key={post.post_id}
+      className="post-link"
+    >
+      <PostContainer post={post} commentBtn />
     </Link>
   ));
 
   return (
     <>
       {isFetching && <div>Loading...</div>}
-      {posts && <Container>{postsList}</Container>}
+      {posts && <Container className="posts-container">{postsList}</Container>}
     </>
   );
 };

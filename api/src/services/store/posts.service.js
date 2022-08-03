@@ -60,7 +60,6 @@ module.exports = {
   addPostTransaction: async (postData, postMedia, visible) =>
     db.transaction(async () => {
       const addPost = await db("Posts").insert(postData, "post_id");
-      console.log(addPost);
       await db("PostMedia").insert({ post_id: addPost[0], link: postMedia });
 
       await db("CurrentPostVisible").insert({

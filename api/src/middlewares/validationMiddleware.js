@@ -51,7 +51,6 @@ module.exports = (validationRules) => async (req, res, next) => {
         case "regex":
           {
             const regex = new RegExp(param);
-            console.log(regex);
             if (!regex.test(req.body[field])) {
               fieldErrors.push("Data format invalid");
             }
@@ -66,7 +65,6 @@ module.exports = (validationRules) => async (req, res, next) => {
             additionalParams.length === 3
               ? req.params[additionalParams[2]]
               : null;
-          console.log(field, req.body);
 
           const result = await getByParams(table, column, req.body[field], id);
           if (result.length !== 0) {

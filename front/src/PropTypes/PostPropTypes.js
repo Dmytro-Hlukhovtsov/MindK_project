@@ -8,4 +8,5 @@ module.exports = {
   created_time: PropTypes.string.isRequired,
   total_comments: PropTypes.number.isRequired,
   total_likes: PropTypes.number.isRequired,
+  commentable: PropTypes.bool.isRequired,
 };

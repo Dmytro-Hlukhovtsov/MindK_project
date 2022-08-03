@@ -15,7 +15,6 @@ module.exports = (rule) => async (req, res, next) => {
           checkRule.resource,
           userRole.name
         );
-        console.log(permissions);
         if (permissions && permissions.length !== 0) {
           // eslint-disable-next-line no-restricted-syntax
           for await (const permission of permissions) {
@@ -26,7 +25,6 @@ module.exports = (rule) => async (req, res, next) => {
               isAllow = true;
             } else if (checkRule.getResource) {
               const resource = await checkRule.getResource(req);
-              console.log("resource", resource);
               if (checkRule.isOwn(resource, user.user_id)) {
                 isAllow = true;
               }

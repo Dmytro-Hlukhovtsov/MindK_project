@@ -12,20 +12,28 @@ const PostActionsButton = ({ post }) => {
   const handleDialogClose = () => {
     setDialogOpen(false);
   };
+
   const open = Boolean(anchorEl);
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
+  const handleClick = (e) => {
+    e.preventDefault();
+    setAnchorEl(e.currentTarget);
+    return false;
   };
-  const handleCloseMenuWithOpenDialog = () => {
+  const handleCloseMenuWithOpenDialog = (e) => {
+    e.preventDefault();
+
     setAnchorEl(null);
     setDialogOpen(true);
   };
-  const handleClose = () => {
+  const handleClose = (e) => {
+    e.preventDefault();
+
+    console.log("loh");
     setAnchorEl(null);
   };
 
   return (
-    <div>
+    <>
       <IconButton
         id="basic-button"
         aria-controls={open ? "basic-menu" : undefined}
@@ -49,10 +57,10 @@ const PostActionsButton = ({ post }) => {
       </Menu>
       <AddPostDialog
         isDialogOpened={dialogOpen}
-        closeDialog={() => handleDialogClose()}
+        closeDialog={handleDialogClose}
         post={post}
       />
-    </div>
+    </>
   );
 };
 
