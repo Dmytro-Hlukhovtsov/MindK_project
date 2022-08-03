@@ -4,8 +4,9 @@ import PostForm from "./PostForm";
 import postPropTypes from "../../PropTypes/PostPropTypes";
 
 const AddPostDialog = ({ isDialogOpened, closeDialog, post }) => {
-  const handleClose = () => {
-    closeDialog(false);
+  const handleClose = (e) => {
+    e.preventDefault();
+    closeDialog();
   };
 
   return (

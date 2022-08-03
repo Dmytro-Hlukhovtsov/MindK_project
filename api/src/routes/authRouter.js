@@ -78,7 +78,6 @@ router.post(
   (req, res, next) =>
     passport.authenticate("local", async (error, user, info) => {
       if (user) {
-        console.log("user", user);
         const { accessToken, refreshToken } = await authService.authorizeById(
           user.user_id
         );

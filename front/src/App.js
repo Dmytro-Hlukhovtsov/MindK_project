@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useLayoutEffect, useMemo, useState } from "react";
 import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 
 import "./App.css";
@@ -32,7 +32,7 @@ function App() {
     });
     document.location.reload();
   };
-  useEffect(() => {
+  useLayoutEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
       const tokenStr = JSON.parse(token);
@@ -43,11 +43,8 @@ function App() {
         user: {},
       });
     }
-    console.log(Object.keys(context.token).length);
   }, []);
-  useEffect(() => {
-    console.log(context);
-  }, [context]);
+
   const memoContext = useMemo(() => ({ context, setContext }), [context]);
 
   return (

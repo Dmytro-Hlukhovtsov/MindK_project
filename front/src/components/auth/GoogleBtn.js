@@ -5,8 +5,8 @@ import { apiClient } from "../../config/axios";
 import configs from "../../configs";
 import authContext from "../../authContext";
 
-const GoogleBtn = ({ setAuth }) => {
-  const { context, setContext } = useContext(authContext);
+const GoogleBtn = () => {
+  const { setContext } = useContext(authContext);
   const onGoogleAuthSuccess = useCallback((data) => {
     apiClient
       .post(`/auth/google`, {
